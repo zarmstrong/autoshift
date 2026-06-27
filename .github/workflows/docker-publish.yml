@@ -23,11 +23,20 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Compute image tag
+        id: image-tag
+        run: |
+          if [ "${GITHUB_REF_NAME}" = "master" ]; then
+            echo "value=latest" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${GITHUB_REF_NAME//\//-}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/autoshift:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/autoshift:${{ steps.image-tag.outputs.value }}
             ${{ secrets.DOCKERHUB_USERNAME }}/autoshift:${{ github.sha }}
