@@ -476,7 +476,11 @@ def main(args):
                     else:
                         # don't spam if we reached the hourly limit
                         if client.last_status == Status.TRYLATER:
-                            notify_trylater(client.last_status.msg, game, platform)
+                            notify_trylater(
+                                client.last_status.msg,
+                                known_games.get(game, game),
+                                platform,
+                            )
                             return
 
                     if client.last_status != Status.SLOWDOWN:
