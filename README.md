@@ -1,6 +1,6 @@
 # AutoSHiFt: Automatically redeem Gearbox SHiFT Codes
 
-- **Compatibility:** 3.9+.
+- **Compatibility:** 3.9+ with Docker images tested on Python 3.14.
 - **Platform:** Crossplatform.
 - **Repo:** https://github.com/zarmstrong/autoshift forked from https://github.com/ugoogalizer/autoshift forked from https://github.com/Fabbi/autoshift
 
@@ -211,7 +211,7 @@ This one is the commandline interface you call to use this tool.
 
 # Docker
 
-Available as a docker image based on `python3.10-buster`
+Available as a docker image based on `python:3.14-slim`
 
 ## Docker Usage
 
