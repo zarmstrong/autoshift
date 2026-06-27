@@ -9,8 +9,5 @@ ENV SHIFT_GAMES='bl4 bl3 blps bl2 bl1' \
 COPY . /autoshift/
 RUN pip install -r ./autoshift/requirements.txt && \
     mkdir -p ./autoshift/data
-CMD if [ -n "${SHIFT_REDEEM}" ]; then \
-        python ./autoshift/auto.py --user ${SHIFT_USER} --pass ${SHIFT_PASS} --redeem ${SHIFT_REDEEM} ${SHIFT_ARGS}; \
-    else \
-        python ./autoshift/auto.py --user ${SHIFT_USER} --pass ${SHIFT_PASS} --games ${SHIFT_GAMES} --platforms ${SHIFT_PLATFORMS} ${SHIFT_ARGS}; \
-    fi
+RUN chmod +x ./autoshift/docker-entrypoint.sh
+ENTRYPOINT ["./autoshift/docker-entrypoint.sh"]
