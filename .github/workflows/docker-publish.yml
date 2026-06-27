@@ -48,4 +48,4 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ secrets.DOCKERHUB_USERNAME }}/autoshift
-          readme-filepath: ./README.md
+          readme-filepath: ./README.dockerhub.md
