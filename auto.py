@@ -455,6 +455,7 @@ def main(args):
                     # skip keys we don't want
                     if (args.golden and not m) or (args.non_golden and m):
                         _L.debug("Skipping key not wanted")
+                        num += 1
                         continue
 
                     if m:
@@ -462,11 +463,13 @@ def main(args):
                         # skip golden keys if we reached the limit
                         if args.limit <= 0:
                             _L.debug("Skipping key as we've reached a limit")
+                            num += 1
                             continue
 
                         # skip if this code has too many golden keys
                         if (args.limit - num_g_keys) < 0:
                             _L.debug("Skipping key that has too many golden keys")
+                            num += 1
                             continue
 
                     redeemed = redeem(key)
