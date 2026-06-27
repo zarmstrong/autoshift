@@ -10,7 +10,7 @@ python = "^3.9"
 APScheduler = "^3.9.1"
 apprise = ">=1,<2"
 beautifulsoup4 = "^4.11.1"
-lxml = "^4.9.0"
+lxml = ">=6,<7"
 requests = "^2.28.0"
 
 [tool.poetry.dev-dependencies]
