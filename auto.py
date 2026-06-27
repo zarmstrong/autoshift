@@ -257,12 +257,10 @@ def setup_argparser():
         "--limit",
         type=int,
         default=200,
-        help=textwrap.dedent(
-            """\
+        help=textwrap.dedent("""\
                         Max number of golden Keys you want to redeem.
                         (default 200)
-                        NOTE: You can only have 255 keys at any given time!"""
-        ),
+                        NOTE: You can only have 255 keys at any given time!"""),
     )  # noqa
     parser.add_argument(
         "--schedule",
@@ -372,7 +370,9 @@ def main(args):
                     filter(lambda key: not key.redeemed, all_keys[game][platform])
                 )
                 _L.info(f"Keys to be redeemed: {t_keys}")
-                for num, key in enumerate(t_keys):
+                num = 0
+                while num < len(t_keys):
+                    key = t_keys[num]
 
                     if (
                         num and not (num % 15)
@@ -412,6 +412,9 @@ def main(args):
                         # don't spam if we reached the hourly limit
                         if client.last_status == Status.TRYLATER:
                             return
+
+                    if client.last_status != Status.SLOWDOWN:
+                        num += 1
 
         _L.info("No more keys left!")
 
