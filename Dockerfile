@@ -1,4 +1,4 @@
-FROM python:3.14-slim
+FROM python:3.14-alpine
 
 ENV SHIFT_GAMES='bl4 bl3 blps bl2 bl1' \
     SHIFT_PLATFORMS='epic steam' \
