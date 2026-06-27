@@ -378,6 +378,54 @@ Notes about autoshift behavior:
 - The tool contains a heuristic: if the CLI-provided password contains `!` and an environment password (SHIFT_PASS or AUTOSHIFT_PASS_RAW) appears longer, the environment value will be preferred. Still, supplying the full password via SHIFT_PASS (or via a container secret) is the most reliable method.
 - Do not commit passwords to command history or scripts. Use environment variables, container secrets, or mounted files / K8s Secrets.
 
+#### **SHIFT_APPRISE_URLS** (optional)
+Semicolon- or newline-separated Apprise target URLs used when SHiFT responds with "launch a SHiFT-enabled title first".
+
+Autoshift sends a notification only for the `TRYLATER` condition, which is the case where SHiFT requires you to launch a SHiFT-enabled game before more redemptions can continue.
+
+How to use it:
+- Set `SHIFT_APPRISE_URLS` to one or more Apprise URLs.
+- Separate multiple targets with either `;` or a newline.
+- Autoshift will send the same alert to every configured target.
+
+Examples:
+
+```sh
+# Discord webhook
+export SHIFT_APPRISE_URLS='discord://webhook_id/webhook_token'
+
+# ntfy topic
+export SHIFT_APPRISE_URLS='ntfy://my-topic'
+
+# Gotify server
+export SHIFT_APPRISE_URLS='gotify://gotify.example.com/app-token'
+
+# Email via SMTP
+export SHIFT_APPRISE_URLS='mailtos://user:app-password@gmail.com?to=you@example.com'
+
+# Multiple targets at once
+export SHIFT_APPRISE_URLS='discord://webhook_id/webhook_token;ntfy://my-topic'
+```
+
+Official Apprise references:
+- Docs: https://appriseit.com/getting-started/
+- Supported services: https://appriseit.com/
+- URL builder: https://appriseit.com/tools/url-builder/
+- Configuration help: https://appriseit.com/getting-started/configuration/
+
+Notes:
+- Prefer using environment variables, Docker secrets, or Kubernetes Secrets instead of committing notification URLs to files, since many Apprise URLs contain tokens or passwords.
+- If your notification target needs provider-specific options, use the Apprise documentation or URL builder above to generate the correct URL format.
+
+#### **SHIFT_APPRISE_COOLDOWN_MINUTES** (optional)
+Minimum number of minutes between repeated TRYLATER notifications.
+
+Default: `0` (notify every time)
+
+Example: `120`
+
+If you run autoshift on a schedule, set a cooldown to avoid repeated alerts every time the job encounters the same SHiFT block.
+
 #### **SHIFT_GAMES** (recommended)
 The game(s) you want to redeem codes for
 

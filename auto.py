@@ -52,6 +52,71 @@ under certain conditions; see LICENSE for details.
 """
 
 
+def notify_trylater(message: str, game: str, platform: str):
+    raw_targets = os.getenv("SHIFT_APPRISE_URLS")
+    if not raw_targets:
+        return
+
+    try:
+        from apprise import Apprise
+    except ImportError:
+        _L.warning("Apprise is not installed; skipping TRYLATER notification.")
+        return
+
+    targets = [
+        target.strip()
+        for target in raw_targets.replace("\n", ";").split(";")
+        if target.strip()
+    ]
+    if not targets:
+        _L.warning("No valid Apprise targets configured; skipping notification.")
+        return
+
+    cooldown_minutes_raw = os.getenv("SHIFT_APPRISE_COOLDOWN_MINUTES", "0")
+    try:
+        cooldown_seconds = max(0, int(float(cooldown_minutes_raw) * 60))
+    except ValueError:
+        _L.warning("Invalid SHIFT_APPRISE_COOLDOWN_MINUTES value; disabling cooldown.")
+        cooldown_seconds = 0
+
+    marker_path = data_path(".trylater_notification")
+    now = int(__import__("time").time())
+    if cooldown_seconds and os.path.exists(marker_path):
+        try:
+            with open(marker_path, encoding="utf-8") as handle:
+                last_sent = int(handle.read().strip() or "0")
+            if (now - last_sent) < cooldown_seconds:
+                _L.info("Skipping TRYLATER notification because cooldown is active.")
+                return
+        except (OSError, ValueError):
+            pass
+
+    notifier = Apprise()
+    for target in targets:
+        notifier.add(target)
+
+    profile = os.getenv("AUTOSHIFT_PROFILE")
+    body = [message, f"Game: {game}", f"Platform: {platform}"]
+    if profile:
+        body.append(f"Profile: {profile}")
+    body.append("Launch a SHiFT-enabled title, then run autoshift again.")
+
+    if not notifier.notify(
+        title="autoshift action required",
+        body="\n".join(body),
+    ):
+        _L.warning("Apprise did not accept the TRYLATER notification.")
+        return
+
+    try:
+        with open(marker_path, "w", encoding="utf-8") as handle:
+            handle.write(str(now))
+    except OSError:
+        _L.warning("Sent TRYLATER notification but could not update cooldown state.")
+
+    _L.info("Sent TRYLATER notification.")
+
+
 def redeem(key: "Key"):
     import query
     from shift import Status
@@ -411,6 +476,7 @@ def main(args):
                     else:
                         # don't spam if we reached the hourly limit
                         if client.last_status == Status.TRYLATER:
+                            notify_trylater(client.last_status.msg, game, platform)
                             return
 
                     if client.last_status != Status.SLOWDOWN:
