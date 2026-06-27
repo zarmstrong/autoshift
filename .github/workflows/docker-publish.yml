@@ -40,3 +40,12 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/autoshift:${{ steps.image-tag.outputs.value }}
             ${{ secrets.DOCKERHUB_USERNAME }}/autoshift:${{ github.sha }}
+
+      - name: Update Docker Hub description
+        if: github.ref_name == 'master'
+        uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/autoshift
+          readme-filepath: ./README.md
