@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: Create or update release
         id: release
-        uses: googleapis/release-please-action@v4
+        uses: googleapis/release-please-action@v5
 
   publish-docker:
     needs: release
