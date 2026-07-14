@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - master
+    paths:
+      - "*.py"
+      - Dockerfile
+      - docker-entrypoint.sh
+      - requirements.txt
+      - .github/workflows/docker-publish.yml
   workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
