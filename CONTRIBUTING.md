@@ -13,7 +13,7 @@ python3 -m venv venv
 source venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-python -m pip install pre-commit flake8 mypy
+python -m pip install pre-commit
 ```
 
 On Windows PowerShell, activate the environment with:
@@ -37,8 +37,9 @@ pre-commit install
 ```
 
 The hooks check for merge markers, validate YAML, fix trailing whitespace and
-missing final newlines, and run Flake8 and mypy. They run automatically when
-you commit. To check every tracked file before opening a pull request, run:
+missing final newlines, and run the Flake8 and mypy versions pinned in
+`.pre-commit-config.yaml`. They run automatically when you commit. To check
+every tracked file before opening a pull request, run:
 
 ```sh
 pre-commit run --all-files
@@ -84,11 +85,11 @@ pre-commit run --all-files
 python auto.py --help
 ```
 
-You can also run the checks directly while iterating:
+You can also run individual pinned hooks while iterating:
 
 ```sh
-flake8 *.py
-mypy *.py
+pre-commit run flake8 --all-files
+pre-commit run mypy --all-files
 ```
 
 If your change affects the container, build it and check the CLI entry point:
