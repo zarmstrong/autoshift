@@ -4,6 +4,17 @@ on:
   push:
     branches:
       - master
+    paths:
+      - "*.py"
+      - Dockerfile
+      - docker-entrypoint.sh
+      - requirements.txt
+      - pyproject.toml
+      - poetry.lock
+      - CHANGELOG.md
+      - release-please-config.json
+      - .release-please-manifest.json
+      - .github/workflows/release-please.yml
   workflow_dispatch:
 
 permissions:
@@ -51,3 +62,11 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/autoshift:${{ needs.release.outputs.version }}
             ${{ secrets.DOCKERHUB_USERNAME }}/autoshift:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/autoshift:${{ github.sha }}
+
+      - name: Update Docker Hub description
+        uses: peter-evans/dockerhub-description@v5
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/autoshift
+          readme-filepath: ./README.dockerhub.md
