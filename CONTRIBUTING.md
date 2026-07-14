@@ -108,6 +108,13 @@ Use short, imperative commit subjects. Conventional Commit prefixes used by
 the project include `fix:`, `docs:`, `build(python):`, and `ci(docker):`.
 Keep unrelated changes in separate commits.
 
+Releases follow Semantic Versioning and are automated with Release Please.
+Use `fix:` for a patch release, `feat:` for a minor release, and append `!`
+or a `BREAKING CHANGE:` footer for a major release. Documentation, CI, and
+chore-only commits do not normally trigger a version bump. Release Please
+maintains a release pull request; merging it creates the GitHub release and
+publishes versioned and `latest` Docker images.
+
 Before submitting a pull request:
 
 1. Rebase or merge the current target branch and resolve any conflicts.
@@ -119,4 +126,3 @@ In the pull request, provide a concise summary, explain the user-visible
 effect, link relevant issues, and list the validation commands and results.
 Include logs for runtime fixes. Screenshots are generally only useful for
 rendered documentation or workflow UI changes.
-

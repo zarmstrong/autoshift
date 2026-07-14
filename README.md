@@ -1,7 +1,7 @@
 # AutoSHiFt: Automatically redeem Gearbox SHiFT Codes
 
 <p align="center">
-  <a href="https://github.com/zarmstrong/autoshift/releases"><img alt="Latest Version" src="https://img.shields.io/github/v/release/zarmstrong/autoshift?style=flat&amp;color=white&amp;logo=github&amp;logoColor=white"></a>
+  <a href="https://github.com/zarmstrong/autoshift/releases/latest"><img alt="Latest Version" src="https://img.shields.io/github/v/release/zarmstrong/autoshift?display_name=tag&amp;sort=semver&amp;style=flat&amp;color=white&amp;logo=github&amp;logoColor=white"></a>
   <a href="https://github.com/zarmstrong/autoshift/stargazers"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/zarmstrong/autoshift?style=flat&amp;color=limegreen&amp;logo=github&amp;logoColor=white"></a>
   <a href="https://github.com/MShawon/github-clone-count-badge"><img alt="GitHub Traffic" src="https://img.shields.io/badge/dynamic/json?style=flat&amp;color=blue&amp;label=views&amp;query=count&amp;url=https%3A%2F%2Fgist.githubusercontent.com%2Fzarmstrong%2Fa42a14de72ebffe8980a7ca47dd36d08%2Fraw%2Ftraffic.json&amp;logo=github&amp;logoColor=white"></a>
   <a href="https://github.com/MShawon/github-clone-count-badge"><img alt="GitHub Clones" src="https://img.shields.io/badge/dynamic/json?style=flat&amp;color=purple&amp;label=clones&amp;query=count&amp;url=https%3A%2F%2Fgist.githubusercontent.com%2Fzarmstrong%2Fa95dbace68b619ceccd0e872b60c06d2%2Fraw%2Fclone.json&amp;logo=github&amp;logoColor=white"></a>
@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://hub.docker.com/r/zacharmstrong/autoshift"><img alt="Docker Version" src="https://img.shields.io/docker/v/zacharmstrong/autoshift?style=flat&amp;color=white&amp;logo=docker&amp;logoColor=white&amp;label=release"></a>
+  <a href="https://hub.docker.com/r/zacharmstrong/autoshift/tags?name=latest"><img alt="Docker Version" src="https://img.shields.io/docker/v/zacharmstrong/autoshift/latest?style=flat&amp;color=white&amp;logo=docker&amp;logoColor=white&amp;label=release"></a>
   <a href="https://hub.docker.com/r/zacharmstrong/autoshift"><img alt="Docker Stars" src="https://img.shields.io/docker/stars/zacharmstrong/autoshift?style=flat&amp;color=limegreen&amp;logo=docker&amp;logoColor=white&amp;label=stars"></a>
   <a href="https://hub.docker.com/r/zacharmstrong/autoshift"><img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/zacharmstrong/autoshift?style=flat&amp;color=blue&amp;logo=docker&amp;logoColor=white&amp;label=pulls"></a>
   <a href="https://hub.docker.com/r/zacharmstrong/autoshift/tags"><img alt="Docker Image Size AMD64" src="https://img.shields.io/docker/image-size/zacharmstrong/autoshift/latest?arch=amd64&amp;label=AMD64%20image%20size&amp;style=flat&amp;color=purple&amp;logo=amd&amp;logoColor=white"></a>
@@ -70,6 +70,23 @@ mkdir -p ./data
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete development setup,
 pre-commit hook installation, validation commands, testing guidance, and pull
 request checklist.
+
+### Releases and versioning
+
+AutoSHiFt follows [Semantic Versioning](https://semver.org/) and uses Release
+Please to automate version bumps, changelog updates, Git tags, and GitHub
+releases. Conventional Commit prefixes determine the next version:
+
+- `fix:` creates a patch release, such as `1.1.0` to `1.1.1`.
+- `feat:` creates a minor release, such as `1.1.0` to `1.2.0`.
+- `feat!:` or a `BREAKING CHANGE:` footer creates a major release, such as
+  `1.1.0` to `2.0.0`.
+- Documentation, CI, and chore-only changes do not normally create a release.
+
+Release Please maintains a release pull request on `master`. Merging that pull
+request creates the corresponding `vX.Y.Z` GitHub release and publishes Docker
+images tagged `X.Y.Z`, `latest`, and with the release commit SHA. Pin deployments
+to a numbered version for reproducibility; use `latest` to follow new releases.
 
 ## Usage
 
