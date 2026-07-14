@@ -141,7 +141,7 @@ def print_banner(data):
 
     longest_line = max(len(line) for line in lines) + 2
     banner = "\n".join(f"{line: ^{longest_line}}" for line in lines)
-    txt = " autoshift by @Fabbi "
+    txt = " autoshift by @zarmstrong, originally by @Fabbi "
     banner = f"{txt:=^{longest_line}}\n{banner}\n"
     banner += "=" * longest_line
 

@@ -3,8 +3,8 @@ name = "autoshift"
 version = "2.0.1"
 description = "AutoSHIFt: Automatically redeem Gearbox SHIFt Codes"
 authors = [
-    "Fabian Schweinfurth <github@derfabbi.de>",
     "zarmstrong <git@traffid.com>",
+    "Fabian Schweinfurth <github@derfabbi.de>",
 ]
 license = "GPLv3"
 requires-poetry = ">=2.4,<3.0"
