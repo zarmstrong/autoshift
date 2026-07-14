@@ -1,5 +1,23 @@
 # AutoSHiFt: Automatically redeem Gearbox SHiFT Codes
 
+<p align="center">
+  <a href="https://github.com/zarmstrong/autoshift/releases"><img alt="Latest Version" src="https://img.shields.io/github/v/release/zarmstrong/autoshift?style=flat&amp;color=white&amp;logo=github&amp;logoColor=white"></a>
+  <a href="https://github.com/zarmstrong/autoshift/stargazers"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/zarmstrong/autoshift?style=flat&amp;color=limegreen&amp;logo=github&amp;logoColor=white"></a>
+  <a href="https://github.com/MShawon/github-clone-count-badge"><img alt="GitHub Traffic" src="https://img.shields.io/badge/dynamic/json?style=flat&amp;color=blue&amp;label=views&amp;query=count&amp;url=https%3A%2F%2Fgist.githubusercontent.com%2Fzarmstrong%2Fa42a14de72ebffe8980a7ca47dd36d08%2Fraw%2Ftraffic.json&amp;logo=github&amp;logoColor=white"></a>
+  <a href="https://github.com/MShawon/github-clone-count-badge"><img alt="GitHub Clones" src="https://img.shields.io/badge/dynamic/json?style=flat&amp;color=purple&amp;label=clones&amp;query=count&amp;url=https%3A%2F%2Fgist.githubusercontent.com%2Fzarmstrong%2Fa95dbace68b619ceccd0e872b60c06d2%2Fraw%2Fclone.json&amp;logo=github&amp;logoColor=white"></a>
+  <a href="https://github.com/zarmstrong/autoshift/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/zarmstrong/autoshift?style=flat&amp;color=black&amp;logo=gnu&amp;logoColor=white"></a>
+  <a href="https://github.com/zarmstrong/autoshift/commits/master/"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/zarmstrong/autoshift?style=flat&amp;color=lightyellow&amp;logo=github&amp;logoColor=white"></a>
+  <a href="https://github.com/zarmstrong/autoshift/actions/workflows/docker-publish.yml"><img alt="Docker publish status" src="https://img.shields.io/github/actions/workflow/status/zarmstrong/autoshift/docker-publish.yml?branch=master&amp;style=flat&amp;logo=githubactions&amp;logoColor=white&amp;label=docker%20publish"></a>
+  <a href="https://github.com/zarmstrong/autoshift/issues"><img alt="Open issues" src="https://img.shields.io/github/issues/zarmstrong/autoshift?style=flat&amp;color=orange&amp;logo=github&amp;logoColor=white"></a>
+</p>
+
+<p align="center">
+  <a href="https://hub.docker.com/r/zacharmstrong/autoshift"><img alt="Docker Version" src="https://img.shields.io/docker/v/zacharmstrong/autoshift?style=flat&amp;color=white&amp;logo=docker&amp;logoColor=white&amp;label=release"></a>
+  <a href="https://hub.docker.com/r/zacharmstrong/autoshift"><img alt="Docker Stars" src="https://img.shields.io/docker/stars/zacharmstrong/autoshift?style=flat&amp;color=limegreen&amp;logo=docker&amp;logoColor=white&amp;label=stars"></a>
+  <a href="https://hub.docker.com/r/zacharmstrong/autoshift"><img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/zacharmstrong/autoshift?style=flat&amp;color=blue&amp;logo=docker&amp;logoColor=white&amp;label=pulls"></a>
+  <a href="https://hub.docker.com/r/zacharmstrong/autoshift/tags"><img alt="Docker Image Size AMD64" src="https://img.shields.io/docker/image-size/zacharmstrong/autoshift/latest?arch=amd64&amp;label=AMD64%20image%20size&amp;style=flat&amp;color=purple&amp;logo=amd&amp;logoColor=white"></a>
+</p>
+
 - **Compatibility:** 3.9+ with Docker images tested on Python 3.14.
 - **Platform:** Crossplatform.
 - **Repo:** https://github.com/zarmstrong/autoshift forked from https://github.com/ugoogalizer/autoshift forked from https://github.com/Fabbi/autoshift
@@ -46,6 +64,12 @@ source ./venv/bin/activate
 pip install -r requirements.txt
 mkdir -p ./data
 ```
+
+### Development
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete development setup,
+pre-commit hook installation, validation commands, testing guidance, and pull
+request checklist.
 
 ## Usage
 
