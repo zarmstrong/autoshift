@@ -7,7 +7,7 @@
   <a href="https://github.com/MShawon/github-clone-count-badge"><img alt="GitHub Clones" src="https://img.shields.io/badge/dynamic/json?style=flat&amp;color=purple&amp;label=clones&amp;query=count&amp;url=https%3A%2F%2Fgist.githubusercontent.com%2Fzarmstrong%2Fa95dbace68b619ceccd0e872b60c06d2%2Fraw%2Fclone.json&amp;logo=github&amp;logoColor=white"></a>
   <a href="https://github.com/zarmstrong/autoshift/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/zarmstrong/autoshift?style=flat&amp;color=black&amp;logo=gnu&amp;logoColor=white"></a>
   <a href="https://github.com/zarmstrong/autoshift/commits/master/"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/zarmstrong/autoshift?style=flat&amp;color=lightyellow&amp;logo=github&amp;logoColor=white"></a>
-  <a href="https://github.com/zarmstrong/autoshift/actions/workflows/docker-publish.yml"><img alt="Docker publish status" src="https://img.shields.io/github/actions/workflow/status/zarmstrong/autoshift/docker-publish.yml?branch=master&amp;style=flat&amp;logo=githubactions&amp;logoColor=white&amp;label=docker%20publish"></a>
+  <a href="https://github.com/zarmstrong/autoshift/actions/workflows/release-please.yml"><img alt="Docker publish status" src="https://img.shields.io/github/actions/workflow/status/zarmstrong/autoshift/release-please.yml?branch=master&amp;style=flat&amp;logo=githubactions&amp;logoColor=white&amp;label=docker%20publish"></a>
   <a href="https://github.com/zarmstrong/autoshift/issues"><img alt="Open issues" src="https://img.shields.io/github/issues/zarmstrong/autoshift?style=flat&amp;color=orange&amp;logo=github&amp;logoColor=white"></a>
 </p>
 
@@ -30,7 +30,7 @@ This documentation intended to be temporary until Issue [#53](https://github.com
 
 `autoshift` detects and memorizes new games and platforms added to the orcicorn shift key database.
 
-Games currently maintained by mental mars that are scraped and made available to `autoshift` are: 
+Games currently maintained by mental mars that are scraped and made available to `autoshift` are:
 - [Borderlands](https://mentalmars.com/game-news/borderlands-golden-keys/)
 - [Borderlands 2](https://mentalmars.com/game-news/borderlands-2-golden-keys/)
 - [Borderlands 3](https://mentalmars.com/game-news/borderlands-3-golden-keys/)
@@ -92,16 +92,16 @@ to a numbered version for reproducibility; use `latest` to follow new releases.
 
 # ⚠️ Database Change Notice
 
-**As of the 9/18/2025 version, the way redeemed keys are tracked has changed.**  
-Redemption status is now tracked in a separate table for each key and platform combination.  
+**As of the 9/18/2025 version, the way redeemed keys are tracked has changed.**
+Redemption status is now tracked in a separate table for each key and platform combination.
 
-**On first run after upgrade, all keys will be retried to ensure the database is properly marked. This may take a long time if you have a large key database.**  
+**On first run after upgrade, all keys will be retried to ensure the database is properly marked. This may take a long time if you have a large key database.**
 This is expected and only happens once; subsequent runs will be fast.
 
 ## Usage Instructions
 
-You can now specify exactly which platforms should redeem which games' SHiFT codes using the `--redeem` argument.  
-**Recommended:** Use `--redeem` for fine-grained control.  
+You can now specify exactly which platforms should redeem which games' SHiFT codes using the `--redeem` argument.
+**Recommended:** Use `--redeem` for fine-grained control.
 **Legacy:** You can still use `--games` and `--platforms` together, but a warning will be printed and all games will be redeemed on all platforms.
 
 ### New (Recommended) Usage
@@ -286,23 +286,23 @@ services:
       - SHIFT_ARGS=--redeem bl3:steam,epic bl2:epic --schedule -v
 ```
 
-> **Note:**  
-> When using Docker, set the `SHIFT_ARGS` environment variable to include your `--redeem ...` options.  
+> **Note:**
+> When using Docker, set the `SHIFT_ARGS` environment variable to include your `--redeem ...` options.
 > If you use both `SHIFT_GAMES`/`SHIFT_PLATFORMS` and `--redeem`, the `--redeem` mapping will take precedence and a warning will be printed if legacy options are also present.
 
 ## Kubernetes Usage:
 
-After setting up the secrets in K8s first: 
+After setting up the secrets in K8s first:
 ```bash
 kubectl create namespace autoshift
 kubectl config set-context --current --namespace=autoshift
 kubectl create secret generic autoshift-secret --from-literal=username='XXX' --from-literal=password='XXX'
 
-# To get/check the username and password use: 
+# To get/check the username and password use:
 kubectl get secret autoshift-secret -o jsonpath="{.data.username}" | base64 -d
 kubectl get secret autoshift-secret -o jsonpath="{.data.password}" | base64 -d
 ```
-Then deploy with something similar to: 
+Then deploy with something similar to:
 ``` yaml
 --- # deployment
 apiVersion: apps/v1
@@ -373,8 +373,8 @@ spec:
 
 ```
 
-> **Note:**  
-> When using Kubernetes, set the `SHIFT_ARGS` environment variable in your deployment manifest to include your `--redeem ...` options.  
+> **Note:**
+> When using Kubernetes, set the `SHIFT_ARGS` environment variable in your deployment manifest to include your `--redeem ...` options.
 > If you use both `SHIFT_GAMES`/`SHIFT_PLATFORMS` and `--redeem`, the `--redeem` mapping will take precedence and a warning will be printed if legacy options are also present.
 
 ## Variables
@@ -536,7 +536,7 @@ docker build -t autoshift:latest .
 
 ``` bash
 
-# Once off setup: 
+# Once off setup:
 git clone TODO
 
 # Personal parameters
@@ -548,9 +548,9 @@ git pull
 export VERSIONTAG=1.8
 
 #Build the Image
-docker build -t autoshift:latest -t autoshift:${VERSIONTAG} . 
+docker build -t autoshift:latest -t autoshift:${VERSIONTAG} .
 
-#Get the image name, it will be something like 41d81c9c2d99: 
+#Get the image name, it will be something like 41d81c9c2d99:
 export IMAGE=$(docker images -q autoshift:latest)
 echo ${IMAGE}
 
