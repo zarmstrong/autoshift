@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "autoshift"
-version = "2.0.1"
+version = "2.0.2"
 description = "AutoSHIFt: Automatically redeem Gearbox SHIFt Codes"
 authors = [
     "zarmstrong <git@traffid.com>",
