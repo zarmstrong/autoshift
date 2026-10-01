@@ -56,6 +56,11 @@ except ImportError:
     _L.warning("Migrations module not found. Skipping code format migration.")
 
 base_url = "https://shift.gearboxsoftware.com"
+# SHiFT returns 403 Forbidden to the default python-requests User-Agent
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+)
 
 
 def json_headers(token):
@@ -166,6 +171,7 @@ class ShiftClient:
         from os import path
 
         self.client = requests.session()
+        self.client.headers["User-Agent"] = USER_AGENT
         self.last_status = Status.NONE
         # profile-aware cookie path
         self.cookie_file = data_path(".cookies.save")
