@@ -2,4 +2,4 @@ APScheduler>=3.9.1,<4
 apprise>=1,<2
 beautifulsoup4>=4.11.1,<5
 lxml>=6,<7
-requests~=2.28
+requests>=2.32.5,<3
