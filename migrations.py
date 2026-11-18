@@ -209,3 +209,28 @@ def migrate_redeemed_table(conn):
     c.execute("DROP TABLE keys_old")
     conn.commit()
     return True
+
+
+@register(4)
+def remove_misparsed_redeemed_platforms(conn):
+    """
+    Un-mark codes that were "redeemed" on platforms that do not exist.
+
+    The v2.0.0 Docker entrypoint quoted SHIFT_REDEEM, so the image default
+    reached auto.py as one --redeem entry and parsed as bl4 with platforms
+    such as "steam ttw:epic bl3:epic bl2:epic". SHiFT rejected those
+    attempts and the codes were recorded in redeemed_keys under the bogus
+    platform, which hides them from every platform. Real platform names
+    never contain spaces or colons, so drop those rows and let the codes
+    be retried.
+    """
+    c = conn.cursor()
+    c.execute(
+        "DELETE FROM redeemed_keys WHERE platform LIKE '% %' OR platform LIKE '%:%'"
+    )
+    if c.rowcount > 0:
+        _L.info(
+            f"Migration: Removed {c.rowcount} redeemed entries recorded under "
+            "invalid platform names. Those codes will be retried."
+        )
+    return True
