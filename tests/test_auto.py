@@ -1,3 +1,4 @@
+import autoshift_test_env  # noqa: F401  (must stay first: isolates data dir)
 import contextlib
 import io
 import unittest

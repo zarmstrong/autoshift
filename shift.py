@@ -67,6 +67,18 @@ def json_headers(token):
     return {"x-csrf-token": token, "x-requested-with": "XMLHttpRequest"}
 
 
+# Synthetic status code used internally when SHiFT bounces us to its sign-in page.
+LOGIN_REQUIRED = 401
+
+
+def is_login_page(r: Response) -> bool:
+    """Return True if SHiFT redirected an authenticated request to its sign-in page."""
+    from urllib.parse import urlparse
+
+    url = urlparse(r.url)
+    return url.path.rstrip("/") == "/home" and "redirect_to=" in url.query
+
+
 # filthy enum hack with auto convert
 class Status(Enum):
     NONE = "Something unexpected happened.."
@@ -79,6 +91,10 @@ class Status(Enum):
     SUCCESS = "Redeemed {key.reward}"
     INVALID = "The code `{key.code}` is invalid"
     SLOWDOWN = "Too many requests"
+    SERVERERROR = "SHiFT returned a server error; the code will be retried next run"
+    LOGGEDOUT = (
+        "Not logged in to SHiFT: the saved session expired and logging in again failed"
+    )
     UNKNOWN = "An unknown Error occured: {msg}"
 
     def __init__(self, s: str):
@@ -175,6 +191,9 @@ class ShiftClient:
         self.last_status = Status.NONE
         # profile-aware cookie path
         self.cookie_file = data_path(".cookies.save")
+        # kept in memory only, so an expired session can be renewed
+        self._user = user
+        self._pw = pw
         # try to load cookies. Query for login data if not present
         if not self.__load_cookie():
             print("First time usage: Login to your SHiFT account...")
@@ -182,6 +201,7 @@ class ShiftClient:
                 user = input("Username: ")
             if not pw:
                 pw = input_pw("Password: ")
+            self._user, self._pw = user, pw
 
             self.__login(user, pw)
             if self.__save_cookie():
@@ -218,18 +238,44 @@ class ShiftClient:
             self.client.cookies.update(pickle.loads(content))
         return True
 
+    def __relogin(self) -> bool:
+        """Log in again after the saved session expired. Returns True on success."""
+        if not (self._user and self._pw):
+            _L.error(
+                "SHiFT session expired and no credentials are available to log in "
+                "again. Set SHIFT_USER/SHIFT_PASS (or --user/--pass)."
+            )
+            return False
+        _L.warning("SHiFT session expired; logging in again.")
+        self.client.cookies.clear()
+        self.__login(self._user, self._pw)
+        if self.__save_cookie():
+            _L.info("Login Successful")
+            return True
+        _L.error("Couldn't log in again. Are your credentials correct?")
+        return False
+
     def redeem(self, code: str, game: str, platform: str) -> Status:
         found, status_code, form_data = self.__get_redemption_form(code, game, platform)
+        if not found and status_code == LOGIN_REQUIRED:
+            if self.__relogin():
+                found, status_code, form_data = self.__get_redemption_form(
+                    code, game, platform
+                )
         # the expired message comes from even wanting to redeem
         if not found:
-            if status_code >= 500:
-                # entered key was invalid
-                status = Status.INVALID
+            if status_code == LOGIN_REQUIRED:
+                status = Status.LOGGEDOUT
+            elif status_code >= 500:
+                # A server-side failure says nothing about the code itself (SHiFT now
+                # answers unknown codes with 200 "does not exist"), so don't let an
+                # outage mark codes as done; they will be retried next run.
+                status = Status.SERVERERROR
             elif status_code == 429:
                 status = Status.SLOWDOWN
             elif "expired" in form_data:
                 status = Status.EXPIRED
-            elif "not available" in form_data:
+            elif "not available" in form_data or "does not exist" in form_data:
                 status = Status.INVALID
             elif "already been redeemed" in form_data:
                 status = Status.REDEEMED
@@ -304,7 +350,12 @@ class ShiftClient:
         """Get Form data for code redemption"""
 
         the_url = f"{base_url}/code_redemptions/new"
-        status_code, token = self.__get_token(the_url)
+        r0 = self.client.get(the_url)
+        _L.debug(f"{r0.request.method} {r0.url} {r0.status_code}")
+        if is_login_page(r0):
+            _L.debug("Redirected to the SHiFT sign-in page; session is not valid")
+            return False, LOGIN_REQUIRED, "Login required"
+        status_code, token = self.__get_token(r0)
         if not token:
             _L.debug("no token")
             return False, status_code, "Could not retrieve Token"
@@ -314,6 +365,10 @@ class ShiftClient:
             headers=json_headers(token),
         )
         _L.debug(f"{r.request.method} {r.url} {r.status_code} {r.reason}")
+
+        if is_login_page(r):
+            _L.debug("Redirected to the SHiFT sign-in page; session is not valid")
+            return False, LOGIN_REQUIRED, "Login required"
 
         if r.status_code != 200:
             _L.debug(f"Did not return code 200: {r.status_code}")
