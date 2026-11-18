@@ -1,10 +1,8 @@
-import os
+import autoshift_test_env  # noqa: F401  (must stay first: isolates data dir)
 import unittest
 from unittest import mock
 
-os.environ["AUTOSHIFT_PROFILE"] = "test_shift"
-
-import shift  # noqa: E402
+import shift
 
 
 class ShiftClientUserAgentTest(unittest.TestCase):

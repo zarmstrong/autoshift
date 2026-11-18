@@ -1,10 +1,8 @@
-import os
+import autoshift_test_env  # noqa: F401  (must stay first: isolates data dir)
 import unittest
 from unittest import mock
 
-os.environ["AUTOSHIFT_PROFILE"] = "test_redeem_status"
-
-import shift  # noqa: E402
+import shift
 
 BASE = shift.base_url
 LOGIN_URL = (
@@ -142,6 +140,28 @@ class MarkRedeemedTest(unittest.TestCase):
         ):
             with self.subTest(status=status.name):
                 self.assertTrue(self.run_redeem(status))
+
+
+class TestDataIsolationTest(unittest.TestCase):
+    """Running the suite must never open the developer's real data/ directory."""
+
+    def test_database_and_cookies_live_in_temp_dir(self):
+        import os
+
+        import common
+        import migrations
+        import query
+
+        real_data = os.path.join(common.DIRNAME, "data")
+        self.assertEqual(common.DATA_DIR, common.TEST_DATA_DIR)
+        for path in (
+            migrations.DB_PATH,
+            query.data_path("keys.db"),
+            make_client().cookie_file,
+        ):
+            with self.subTest(path=path):
+                self.assertTrue(path.startswith(common.TEST_DATA_DIR))
+                self.assertFalse(path.startswith(real_data + os.sep))
 
 
 if __name__ == "__main__":
