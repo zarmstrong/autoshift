@@ -1,8 +1,9 @@
 #!/bin/sh
 # Word-split SHIFT_ARGS, SHIFT_REDEEM, SHIFT_GAMES and SHIFT_PLATFORMS while
-# ensuring Python becomes PID 1.
+# ensuring Python becomes PID 1. Pathname expansion is disabled (-f) so the
+# unquoted expansions only split on whitespace and never match files.
 # shellcheck disable=SC2086
-set -eu
+set -euf
 
 set -- ${SHIFT_ARGS:-}
 

@@ -15,7 +15,7 @@ IMAGE_REDEEM = (
 )
 
 
-def entrypoint_args(**env):
+def entrypoint_args(_cwd=None, **env):
     """Run docker-entrypoint.sh with a fake python and return its argv."""
     with tempfile.TemporaryDirectory() as tmp:
         fake = os.path.join(tmp, "python")
@@ -25,7 +25,11 @@ def entrypoint_args(**env):
         run_env = {"PATH": tmp + os.pathsep + os.environ["PATH"]}
         run_env.update(env)
         out = subprocess.run(
-            ["sh", ENTRYPOINT], env=run_env, capture_output=True, check=True
+            ["sh", ENTRYPOINT],
+            env=run_env,
+            cwd=_cwd,
+            capture_output=True,
+            check=True,
         ).stdout.decode()
     args = out.split("\0")[:-1]
     assert args[0] == "./autoshift/auto.py"
@@ -66,6 +70,17 @@ class EntrypointTest(unittest.TestCase):
             SHIFT_REDEEM="bl3:steam", SHIFT_ARGS="--schedule"
         )
         self.assertEqual(args[-3:], ["--redeem", "bl3:steam", "--schedule"])
+
+    def test_glob_characters_are_not_expanded(self):
+        with tempfile.TemporaryDirectory() as cwd:
+            for name in ("bl3:steam", "x"):
+                open(os.path.join(cwd, name), "w").close()
+            args = entrypoint_args(
+                _cwd=cwd, SHIFT_REDEEM="bl3:*", SHIFT_ARGS="--profile ?"
+            )
+        self.assertEqual(
+            args[-4:], ["--redeem", "bl3:*", "--profile", "?"]
+        )
 
     def test_credentials_with_spaces_stay_one_argument(self):
         args = entrypoint_args(
