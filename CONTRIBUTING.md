@@ -99,9 +99,15 @@ docker build -t autoshift:dev .
 docker run --rm -e SHIFT_ARGS=--help autoshift:dev
 ```
 
-Add focused tests for behavior changes. When a test suite is present, run it
-with the test runner used by the repository and include the command and result
-in your pull request.
+Add focused tests for behavior changes. Run the suite from the repository root
+and include the command and result in your pull request:
+
+```sh
+python -m unittest discover -s tests
+```
+
+The `Tests` workflow runs the same command on Python 3.9 and 3.14 for every
+pull request.
 
 ## Commits and pull requests
 
