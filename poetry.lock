@@ -15,14 +15,14 @@ files = [
 
 [[package]]
 name = "apprise"
-version = "1.12.0"
+version = "2.2.0"
 description = "Push Notifications that work with just about every platform!"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "apprise-1.12.0-py3-none-any.whl", hash = "sha256:28edabfec5a9d5dbcd9aa28bdfd8928ecb68764e40214b6e648eab6d974b5a93"},
-    {file = "apprise-1.12.0.tar.gz", hash = "sha256:ffe9860d99cbde05fd156c610d4bcb49d953200c4ed3cb2db001ed50722fc142"},
+    {file = "apprise-2.2.0-py3-none-any.whl", hash = "sha256:deac7647c02463f5398f3f5dbba965031a1507adf1b4348ccf5e53e8f0528f51"},
+    {file = "apprise-2.2.0.tar.gz", hash = "sha256:711382b7c366e575276863da72f5473e34db1735a9980f6df464b337a8003ebc"},
 ]
 
 [package.dependencies]
@@ -33,10 +33,11 @@ PyYAML = "*"
 requests = "*"
 requests-oauthlib = "*"
 tzdata = {version = "*", markers = "platform_system == \"Windows\""}
+urllib3 = "*"
 
 [package.extras]
-all-plugins = ["PGPy", "cryptography", "gntp", "hidapi", "paho-mqtt (>=2.1.0)", "slixmpp (>=1.16.0)", "smpplib"]
-dev = ["babel", "coverage", "mock", "pytest", "pytest-cov", "pytest-mock", "ruff (==0.15.8)", "tox", "validate-pyproject"]
+all-plugins = ["PGPy", "PyNaCl", "cryptography", "gntp", "hidapi", "paho-mqtt (>=2.1.0)", "pika", "slixmpp (>=1.16.0) ; python_version >= \"3.11\"", "smpplib"]
+dev = ["babel", "coverage", "mock", "pytest", "pytest-cov", "pytest-mock", "pytest-xdist", "ruff (==0.15.8)", "tox", "validate-pyproject"]
 windows = ["pywin32", "tzdata"]
 
 [[package]]
@@ -1509,4 +1510,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.9"
-content-hash = "0087ba9c1300e6fc8103fc0c25f34fa267115856273c56ed4a85469fd5a4b746"
+content-hash = "672892c6b26f69e795df5a826ecae975875a72d9790309fc30336c51372385e4"
