@@ -79,5 +79,70 @@ class SessionExpiryTest(unittest.TestCase):
         self.assertEqual(status, shift.Status.LOGGEDOUT)
 
 
+class LookupStatusMappingTest(unittest.TestCase):
+    def lookup(self, status_code, text):
+        client = make_client()
+        client.client.get = mock.Mock(
+            side_effect=[
+                response(f"{BASE}/code_redemptions/new", NEW_PAGE),
+                response(
+                    f"{BASE}/entitlement_offer_codes?code=X", text, status_code
+                ),
+            ]
+        )
+        return client.redeem("X", "Borderlands 4", "steam")
+
+    def test_server_error_is_not_reported_as_invalid(self):
+        status = self.lookup(502, "Bad Gateway")
+        self.assertEqual(status, shift.Status.SERVERERROR)
+        self.assertNotEqual(status, shift.Status.INVALID)
+
+    def test_unknown_code_is_invalid(self):
+        status = self.lookup(200, "This SHiFT code does not exist")
+        self.assertEqual(status, shift.Status.INVALID)
+
+    def test_expired_code_is_expired(self):
+        self.assertEqual(self.lookup(200, EXPIRED_TEXT), shift.Status.EXPIRED)
+
+
+class MarkRedeemedTest(unittest.TestCase):
+    """auto.redeem must only mark a key as done for final answers about the code."""
+
+    def run_redeem(self, status):
+        import auto
+        import query
+
+        key = query.Key(
+            id=1, reward="5 Golden Keys", code="X", game="bl4", platform="steam"
+        )
+        client = mock.Mock()
+        client.redeem.return_value = status
+        with mock.patch.object(auto, "client", client), mock.patch.object(
+            query.db, "set_redeemed"
+        ) as set_redeemed:
+            auto.redeem(key)
+        return set_redeemed.called
+
+    def test_transient_failures_are_not_marked(self):
+        for status in (
+            shift.Status.SERVERERROR,
+            shift.Status.LOGGEDOUT,
+            shift.Status.SLOWDOWN,
+            shift.Status.UNKNOWN,
+        ):
+            with self.subTest(status=status.name):
+                self.assertFalse(self.run_redeem(status))
+
+    def test_final_answers_are_marked(self):
+        for status in (
+            shift.Status.SUCCESS,
+            shift.Status.REDEEMED,
+            shift.Status.EXPIRED,
+            shift.Status.INVALID,
+        ):
+            with self.subTest(status=status.name):
+                self.assertTrue(self.run_redeem(status))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -91,6 +91,7 @@ class Status(Enum):
     SUCCESS = "Redeemed {key.reward}"
     INVALID = "The code `{key.code}` is invalid"
     SLOWDOWN = "Too many requests"
+    SERVERERROR = "SHiFT returned a server error; the code will be retried next run"
     LOGGEDOUT = (
         "Not logged in to SHiFT: the saved session expired and logging in again failed"
     )
@@ -266,13 +267,15 @@ class ShiftClient:
             if status_code == LOGIN_REQUIRED:
                 status = Status.LOGGEDOUT
             elif status_code >= 500:
-                # entered key was invalid
-                status = Status.INVALID
+                # A server-side failure says nothing about the code itself (SHiFT now
+                # answers unknown codes with 200 "does not exist"), so don't let an
+                # outage mark codes as done; they will be retried next run.
+                status = Status.SERVERERROR
             elif status_code == 429:
                 status = Status.SLOWDOWN
             elif "expired" in form_data:
                 status = Status.EXPIRED
-            elif "not available" in form_data:
+            elif "not available" in form_data or "does not exist" in form_data:
                 status = Status.INVALID
             elif "already been redeemed" in form_data:
                 status = Status.REDEEMED
