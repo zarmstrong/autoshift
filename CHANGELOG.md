@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.1.0](https://github.com/zarmstrong/autoshift/compare/v2.0.3...v2.1.0) (2026-11-18)
+
+
+### Features
+
+* **python:** require Python 3.11 or newer ([7c0c42f](https://github.com/zarmstrong/autoshift/commit/7c0c42f412bd1d2ba12a5256cf7b590123b02392))
+
+
+### Bug Fixes
+
+* re-login on expired SHiFT session and stop marking codes invalid on 5xx ([#29](https://github.com/zarmstrong/autoshift/issues/29)) ([a7c63cc](https://github.com/zarmstrong/autoshift/commit/a7c63cc4664f6c21e6d7525edce8fbc623dc8193))
+
+
+### Documentation
+
+* **changelog:** remove duplicate merge-commit entries ([#28](https://github.com/zarmstrong/autoshift/issues/28)) ([741cb79](https://github.com/zarmstrong/autoshift/commit/741cb79a778f6169a15b9f008ea622b00b1fc607))
+
 ## [2.0.3](https://github.com/zarmstrong/autoshift/compare/v2.0.2...v2.0.3) (2026-11-18)
 
 
