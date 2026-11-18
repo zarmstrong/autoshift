@@ -17,17 +17,12 @@ concurrency:
 jobs:
   unittest:
     name: unittest (Python ${{ matrix.python-version }})
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         # Oldest supported version and the version used by the Docker image.
-        # Python 3.9 is end-of-life and has no build for newer Ubuntu runners.
-        include:
-          - python-version: "3.9"
-            os: ubuntu-24.04
-          - python-version: "3.14"
-            os: ubuntu-latest
+        python-version: ["3.11", "3.14"]
 
     steps:
       - name: Check out repository

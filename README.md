@@ -18,7 +18,7 @@
   <a href="https://hub.docker.com/r/zacharmstrong/autoshift/tags"><img alt="Docker Image Size AMD64" src="https://img.shields.io/docker/image-size/zacharmstrong/autoshift/latest?arch=amd64&amp;label=AMD64%20image%20size&amp;style=flat&amp;color=purple&amp;logo=amd&amp;logoColor=white"></a>
 </p>
 
-- **Compatibility:** 3.9+ with Docker images tested on Python 3.14.
+- **Compatibility:** 3.11+ with Docker images tested on Python 3.14.
 - **Platform:** Crossplatform.
 - **Repo:** https://github.com/zarmstrong/autoshift forked from https://github.com/ugoogalizer/autoshift forked from https://github.com/Fabbi/autoshift
 

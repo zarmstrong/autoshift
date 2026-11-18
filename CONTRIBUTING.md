@@ -5,7 +5,7 @@ and focused feature contributions are welcome.
 
 ## Development setup
 
-AutoSHiFt requires Python 3.9 or newer. Fork and clone the repository, then
+AutoSHiFt requires Python 3.11 or newer. Fork and clone the repository, then
 create an isolated environment from the repository root:
 
 ```sh
@@ -106,7 +106,7 @@ and include the command and result in your pull request:
 python -m unittest discover -s tests
 ```
 
-The `Tests` workflow runs the same command on Python 3.9 and 3.14 for every
+The `Tests` workflow runs the same command on Python 3.11 and 3.14 for every
 pull request.
 
 ## Commits and pull requests

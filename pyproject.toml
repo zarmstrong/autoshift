@@ -10,7 +10,7 @@ license = "GPLv3"
 requires-poetry = ">=2.4,<3.0"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.11"
 APScheduler = "^3.11.3"
 apprise = ">=2,<3"
 beautifulsoup4 = "^4.15.0"
