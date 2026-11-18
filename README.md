@@ -98,6 +98,8 @@ Redemption status is now tracked in a separate table for each key and platform c
 **On first run after upgrade, all keys will be retried to ensure the database is properly marked. This may take a long time if you have a large key database.**
 This is expected and only happens once; subsequent runs will be fast.
 
+**Docker images 2.0.0 through 2.0.2 passed `SHIFT_REDEEM` as a single argument**, so codes were tried on platform names such as `steam ttw:epic` and wrongly marked as redeemed. The first run after upgrading removes those entries automatically and retries the affected codes.
+
 ## Usage Instructions
 
 You can now specify exactly which platforms should redeem which games' SHiFT codes using the `--redeem` argument.
