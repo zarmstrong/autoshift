@@ -27,7 +27,7 @@ mypy *.py
 
 ## Testing Guidelines
 
-There is currently no committed automated test suite or coverage threshold. For behavior changes, add focused tests under `tests/` using names such as `test_query.py` and functions such as `test_loads_local_shift_source`. Avoid live Gearbox requests in tests; mock HTTP calls and use temporary databases. At minimum, exercise `python auto.py --help` and the affected code path locally.
+Tests use the standard-library `unittest` runner: `python -m unittest discover -s tests`, run from the repository root. The `Tests` workflow (`.github/workflows/tests.yml`) runs them, plus `python auto.py --help`, on Python 3.9 and 3.14 for every pull request and push to `master`. There is no coverage threshold. For behavior changes, add focused tests under `tests/` using names such as `test_query.py` and functions such as `test_loads_local_shift_source`. Avoid live Gearbox requests in tests; mock HTTP calls and use temporary databases. At minimum, exercise `python auto.py --help` and the affected code path locally.
 
 ## Commit & Pull Request Guidelines
 
