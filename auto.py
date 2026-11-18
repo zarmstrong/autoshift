@@ -473,6 +473,10 @@ def main(args):
                             continue
 
                     redeemed = redeem(key)
+                    if client.last_status == Status.LOGGEDOUT:
+                        # every further request would hit the sign-in page too
+                        _L.error("Stopping this run: not logged in to SHiFT.")
+                        return
                     if redeemed:
                         args.limit -= num_g_keys
                         _L.info(f"Redeeming another {args.limit} Keys")
