@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/zarmstrong/autoshift/compare/v2.1.0...v2.1.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **deps:** bump runtime, dev, and CI dependencies ([#37](https://github.com/zarmstrong/autoshift/issues/37)) ([4972352](https://github.com/zarmstrong/autoshift/commit/49723526d7d52d51bb01e86286032e3bcac6fe9f))
+
 ## [2.1.0](https://github.com/zarmstrong/autoshift/compare/v2.0.3...v2.1.0) (2026-11-18)
 
 
