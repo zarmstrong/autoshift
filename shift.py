@@ -101,10 +101,10 @@ class Status(Enum):
         self.msg = s
 
     @classmethod
-    def _missing_(cls, value: str):
+    def _missing_(cls, value: object):
         obj = object.__new__(cls)
-        obj._value_ = value
-        obj.__init__(value)
+        obj._value_ = cast(str, value)
+        obj.__init__(obj._value_)  # type: ignore[misc]
         cls._value2member_map_[value] = obj  # type: ignore # these bindings are wrong..
         return obj
 
@@ -183,7 +183,7 @@ def input_pw(qry):
 
 
 class ShiftClient:
-    def __init__(self, user: str = None, pw: str = None):
+    def __init__(self, user: Optional[str] = None, pw: Optional[str] = None):
         from os import path
 
         self.client = requests.session()
@@ -304,7 +304,7 @@ class ShiftClient:
         meta = soup.find("meta", attrs=dict(name="csrf-token"))
         if not meta:
             return r.status_code, None
-        return r.status_code, meta["content"]
+        return r.status_code, cast(str, meta["content"])
 
     def __login(self, user, pw):
         """Login with user/pw"""
@@ -392,10 +392,15 @@ class ShiftClient:
 
         forms = title.find_all_next("form", id="new_archway_code_redemption")
         for form in forms:
-            service: bs4.element.Tag = form.find(id="archway_code_redemption_service")
+            service = cast(
+                bs4.element.Tag, form.find(id="archway_code_redemption_service")
+            )
             if platform not in service["value"]:
                 continue
-            form_data = {inp["name"]: inp["value"] for inp in form.find_all("input")}
+            form_data = {
+                cast(str, inp["name"]): cast(str, inp["value"])
+                for inp in form.find_all("input")
+            }
             return True, r.status_code, form_data
 
         return (False, r.status_code, "This code is not available for your platform")
@@ -416,7 +421,11 @@ class ShiftClient:
         div = soup.find("div", id="check_redemption_status")
         if div:
             _L.debug(f"Result Check Redemption Status: {div.text.strip()}")
-            return (div.text.strip(), div["data-url"], div["data-fallback-url"])
+            return (
+                div.text.strip(),
+                cast(str, div["data-url"]),
+                cast(str, div["data-fallback-url"]),
+            )
         div = soup.find("div", class_="alert notice")
         if div:
             _L.debug(f"Result Alert Notice: {div.text.strip()}")
