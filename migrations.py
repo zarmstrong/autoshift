@@ -1,7 +1,7 @@
 import os
 import re
 import sqlite3
-from typing import List, Union
+from typing import Callable, Dict, List, Union
 from common import DIRNAME, _L
 
 try:
@@ -54,7 +54,7 @@ def migrate_shift_codes():
 
 # --- Versioned schema migrations ---
 
-migrationFunctions = {}
+migrationFunctions: Dict[int, Callable[..., bool]] = {}
 
 
 def register(version: int):
