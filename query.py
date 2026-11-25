@@ -24,6 +24,7 @@ import re
 import sqlite3
 from os import makedirs, path
 from typing import (
+    Any,
     Callable,
     ContextManager,
     Dict,
@@ -86,7 +87,7 @@ class SymmetricDict(Dict[_KT, _VT], Generic[_KT, _VT]):
 
 
 ### games used to help find the correct shift redemption forms
-known_games = SymmetricDict(
+known_games: SymmetricDict[str, str] = SymmetricDict(
     {
         "bl1": "Borderlands: Game of the Year Edition",
         "bl2": "Borderlands 2",
@@ -99,7 +100,7 @@ known_games = SymmetricDict(
 )
 
 ### platforms that are used to find the correct input values in the shift redemption forms
-known_platforms = SymmetricDict(
+known_platforms: SymmetricDict[str, str] = SymmetricDict(
     {
         "steam": "steam",
         "epic": "epic",
@@ -212,6 +213,19 @@ class Key:
         "expired",
     )
 
+    # Declared for the type checker; values are assigned via set()/setattr.
+    id: Optional[int]
+    reward: str
+    code: str
+    game: str
+    platform: str
+    redeemed: bool
+    type: Any
+    archived: Any
+    expires: Any
+    link: Any
+    expired: Any
+
     def __init__(self, **kwargs):
         self.redeemed = False
         self.id = None
@@ -261,9 +275,8 @@ class Database(ContextManager):
         self.__open_db()
         return self
 
-    def __exit__(self, *_) -> Optional[bool]:
+    def __exit__(self, *_) -> None:
         self.close_db()
-        return False
 
     def execute(self, sql, parameters=None):
         if not self.__updated:
@@ -443,6 +456,10 @@ def set_shift_source(source: str):
     _L.info(f"Using SHiFT source: {SHIFT_SOURCE}")
 
 
+# Print the source banner only on the first fetch.
+_first_parse = True
+
+
 def parse_shift_orcicorn():
     import json
 
@@ -484,8 +501,9 @@ def parse_shift_orcicorn():
         else:
             valid_codes.append(code_data)
 
-    if parse_shift_orcicorn.first_parse:
-        parse_shift_orcicorn.first_parse = False
+    global _first_parse
+    if _first_parse:
+        _first_parse = False
         print_banner(data)
 
     for code_data in valid_codes:
@@ -514,13 +532,10 @@ def parse_shift_orcicorn():
         yield from keys
 
 
-parse_shift_orcicorn.first_parse = True
-
-
 def update_keys():
     from collections import Counter
 
-    if not parse_shift_orcicorn.first_parse:
+    if not _first_parse:
         _L.info("Checking for new keys!")
 
     keys = list(parse_shift_orcicorn())

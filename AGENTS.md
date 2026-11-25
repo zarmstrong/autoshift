@@ -22,7 +22,7 @@ Follow PEP 8 conventions: four-space indentation, `snake_case` for functions and
 
 ```sh
 flake8 *.py
-mypy *.py
+mypy  # files and options come from [tool.mypy] in pyproject.toml
 ```
 
 ## Testing Guidelines
